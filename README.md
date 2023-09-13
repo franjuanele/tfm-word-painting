@@ -8,6 +8,9 @@ This is a repository containing files from Master's Thesis "Word painting in the
 
 **Year**: 2023
 
+Universidad Carlos III de Madrid
+
+
 # Description of files and important functions
 
 ## df_fun.R

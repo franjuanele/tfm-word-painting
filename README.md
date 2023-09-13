@@ -60,15 +60,16 @@ to export the necessary RDatas, try the functions in `gm_fun.R` to get back rend
 ## model_fitting.R
 This file contains the code that fits the models, plots some diagnostic graphs, and it also includes the code for bootstrapping. Nevermind, as model fitting
 and particularly bootstrapping are computationally expensive, the outputs of bootstrapping (with coefficients, confidence intervals, etc.) are placed as
-CSV files in folder ./bootstrap_tables
+CSV files in folder ./bootstrap_tables. Diagnostic plots are made here instead of elsewhere since here is where models are fitted.
 
 ## graphs.R
 This file contains the code that produces some graphs that have been used elsewhere in our work.
 
 ## musescore_exporter.bat, musescore_exporter.sh
-These shell files are to be used with function `extract_bars_xml` from file `df_fun.R`. They require MuseScore to be installed, and each user will have to 
-modify them to change the path of installation. Perhaps these files may be changed so that they don't require user intervention to work, although that will
-need the creation of an environment variable with MuseScore's path.
+These shell files are to be used with function `extract_bars_xml` from file `df_fun.R`. They require MuseScore to be installed, and in the Windows case each 
+user will have to modify the .bat to change the path of installation. Perhaps these files may be changed so that they don't require user intervention to work, 
+although that will need the creation of an environment variable with MuseScore's path. The bash script was tested in an Ubuntu distribution with a standard
+MuseScore 4 installation, it was not tested in Mac OS but it should work just fine.
 
 ## custom_stemming.txt
 A file with custom stemming that Snowball stemmer wasn't doing right. We looked at the stemming by hand and corrected the words that were wrongly stemmed.
@@ -79,3 +80,19 @@ This is the file containing the dictionary for lemmatization, taken from https:/
 ## stopwords.txt
 This file contains a (slightly modified, with added entries) file with what we have used as stopwords. The original file is taken from https://github.com/stopwords-iso/stopwords-it, 
 and some entries have been added after we noticed some words that we think are stopwords but weren't being considered.
+
+## x.RData and y.RData (Placeholder)
+These two .RData files, which are outside the folder RDatas, are meant to be used with the functions in `gm_fun.R`, like the section at the end of
+`prep.R`. They serve as examples that our process of transforming MusicXML to data frames is lossless, in terms of information, and thus it can be reverted.
+
+## ./RDatas folder
+This folder contains all of the .RData files, that have been obtained by means of `export_rdata_files`. There is one such file for every part, and they 
+contain (most importantly) the music data frame obtained via `get_music_df`.
+
+## ./bootstrap_tables folder
+This folder contains tables with information regarding mixed model bootstrapping, as outputs of the code in `model_fitting.R`. They are meant to be used 
+without having to redo bootstrap, as it is intensive in computing time.
+
+## ./Lyrics folder
+This folder contains the lyrics of every aria in the corpus. These are used in the text mining part in `prep.R`, where they are lemmatized, stemmed and treated (remove
+apostrophes, commas, etc.), and are used to build a document term matrix. After that, tf-idf and pruning are performed.

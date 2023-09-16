@@ -142,12 +142,14 @@ for (i in 1:length(corp_stem)) {
 
 # Document Term Matrix
 
-dtm = DocumentTermMatrix(corp_lemm)
+dtm = DocumentTermMatrix(corp_stem)
 dtm_matrix = as.matrix(dtm)
 
 words = sort(colSums(dtm_matrix), decreasing = TRUE)
 
 words_df = data.frame(word = names(words), freq = words)
+
+# This words_df is used in the graphs.R file for the barplot!
 
 # Wordcloud. This allows us to visualize what stems are most frequent.
 

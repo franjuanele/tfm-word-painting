@@ -90,15 +90,19 @@ A file with custom stemming that Snowball stemmer wasn't doing right. We looked 
 
 This is the file containing the dictionary for lemmatization, taken from <https://github.com/michmech/lemmatization-lists>.
 
-## `stopwords.tx
+## `stopwords.txt`
 
-This file contains a (slightly modified, with added entries) file with what we have used as stopwords. The original file is taken from https://github.com/stopwords-iso/stopwords-it, 
+This file contains a (slightly modified, with added entries) file with what we have used as stopwords. The original file is taken from <https://github.com/stopwords-iso/stopwords-it>, 
 and some entries have been added after we noticed some words that we thought were stopwords but weren't being considered.
 
 ## `x.RData` and `y.RData` (placeholder)
 
 These two `.RData` files, which are outside the folder `./RDatas`, are meant to be used with the functions in `gm_fun.R`, like the section at the end of
 `prep.R`. They serve as examples that our process of transforming MusicXML to data frames is lossless, in terms of information, and thus it can be reverted.
+
+## `fitted_models.RData`
+
+This is a file which allows for instant loading of the pre-fitted models (although they do not take that much time to fit).
 
 ## `./RDatas` folder
 
@@ -109,6 +113,10 @@ contain (most importantly) the music data frame obtained via `get_music_df()`.
 
 This folder contains tables with information regarding mixed model bootstrapping, as outputs of the code in `model_fitting.R`. They are meant to be used 
 without having to redo bootstrap, as it is intensive in computing time.
+
+## `./coefficient_tables` folder
+
+This folder contains tables with the fixed effect coefficients (one for each model that was fitted). 
 
 ## `./Lyrics` folder
 

@@ -96,6 +96,10 @@ This is the file containing the dictionary for lemmatization, taken from <https:
 This file contains a (slightly modified, with added entries) file with what we have used as stopwords. The original file is taken from <https://github.com/stopwords-iso/stopwords-it>, 
 and some entries have been added after we noticed some words that we thought were stopwords but weren't being considered.
 
+## `sorted_tfidf.csv`
+
+This table contains a list of stems together with their tf-idf score.
+
 ## `fitted_models.RData`
 
 This is a file which allows for instant loading of the pre-fitted models (although they do not take that much time to fit).

@@ -41,7 +41,8 @@ function is to extract rendered music on which word painting may be present, acc
 
 This short file contains functions relating integration with package `gm` (a package to write music graphically using R objects). The objective was to verify
 that our codification as music data frames was correct, so that no information was lost and we could "revert" this format back to music notation.
-Its importance in the overall work is small, as it just served as verification that our data model was loyal to the written music.
+Its importance in the overall work is small, as it just served as verification that our data model was loyal to the written music. These require the MusicXML files
+which cannot be shared publicly.
 
 ## `metric_fun.R`
 
@@ -94,11 +95,6 @@ This is the file containing the dictionary for lemmatization, taken from <https:
 
 This file contains a (slightly modified, with added entries) file with what we have used as stopwords. The original file is taken from <https://github.com/stopwords-iso/stopwords-it>, 
 and some entries have been added after we noticed some words that we thought were stopwords but weren't being considered.
-
-## `x.RData` and `y.RData` (placeholder)
-
-These two `.RData` files, which are outside the folder `./RDatas`, are meant to be used with the functions in `gm_fun.R`, like the section at the end of
-`prep.R`. They serve as examples that our process of transforming MusicXML to data frames is lossless, in terms of information, and thus it can be reverted.
 
 ## `fitted_models.RData`
 

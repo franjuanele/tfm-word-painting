@@ -419,11 +419,55 @@ bootstrap_lmer_center(mod_mr2u, here::here("bootstrap_tables", "bootstrap_table_
 
 
 
+# BOOTSTRAP DIFF IN DEVIANCES
+bootstrap_diff_dev = function(lmer_model) {
+  # First we compute the deviance of the full model, note the use of REML = FALSE
+  # as models have not been fitted with ML
+  dev_full = deviance(lmer_model, REML = FALSE)
+  
+  # Now we update the formula
+  form = formula(lmer_model)
+  form = update(form, ~ . - stem:year)
+  
+  # This removes the interaction term. Now we refit the model
+  refitted = update(lmer_model, form)
+  
+  # Calculate the deviance of the simpler model
+  dev_simple = deviance(refitted, REML = FALSE)
+  
+  # Output the difference in deviances
+  return(dev_simple - dev_full)
+}
 
- # DIAGNOSTIC PLOTS (fitted vs residuals)
+# Now we build a custom bootstrapping function using bootMer
+bootstrap_lmer_deviance = function(lmer_model, out_file_path) {
+  print(Sys.time())
+  tictoc::tic()
+  boot_t = bootMer(lmer_model, FUN = bootstrap_diff_dev, nsim = 1000, use.u = T, 
+                   type = "parametric", parallel = "multicore")$t
+  
+  write_csv(data.frame(boot_t), out_file_path)
+  tictoc::toc()
+}
+
+bootstrap_lmer_deviance(mod_ls1, here::here("bootstrap_tables", "bootstrap_table_ls1_deviance.csv"))
+bootstrap_lmer_deviance(mod_ls2, here::here("bootstrap_tables", "bootstrap_table_ls2_deviance.csv"))
+
+bootstrap_lmer_deviance(mod_lq1, here::here("bootstrap_tables", "bootstrap_table_lq1_deviance.csv"))
+bootstrap_lmer_deviance(mod_lq2, here::here("bootstrap_tables", "bootstrap_table_lq2_deviance.csv"))
+
+bootstrap_lmer_deviance(mod_mr1, here::here("bootstrap_tables", "bootstrap_table_mr1_deviance.csv"))
+bootstrap_lmer_deviance(mod_mr2, here::here("bootstrap_tables", "bootstrap_table_mr2_deviance.csv"))
+
+bootstrap_lmer_deviance(mod_im1, here::here("bootstrap_tables", "bootstrap_table_im1_deviance.csv"))
+bootstrap_lmer_deviance(mod_im2, here::here("bootstrap_tables", "bootstrap_table_im2_deviance.csv"))
+
+
+
+# DIAGNOSTIC PLOTS (fitted vs residuals)
 # Bootstrapping not needed for this, so to save
 # time if only the plots are to be seen, one 
-# can only do fitting and skip bootstrap_lmer.
+# can only do fitting and skip bootstrap altogether.
 
 # Local slope, 1 neighbor, centered
 loess_df = data.frame(fitted = fitted.values(mod_ls1), 
@@ -491,3 +535,36 @@ ggplot(data = loess_df, aes(fitted, resid)) +
   ylab("Residuals") + 
   ggtitle("Residuals vs. fitted", 
           subtitle = "Intervallic mean. Centered neighborhood, size 1")
+
+
+# Difference in deviances (bootstrap LRT)
+# The idea is that instead of using an F distribution for the difference in 
+# deviances, we use the bootstrapped distribution
+
+bootstrap_lrt = function(lmer_model, bootstrapped_diff_dev) {
+  # bootstrapped_diff_dev is a vector of bootstrapped differences in deviances
+  form = formula(lmer_model)
+  form = update(form, ~ . - stem:year)
+  
+  diff_in_deviances = deviance(update(lmer_model, form), REML = F) - 
+    deviance(lmer_model, REML = F)
+  
+  # Now the p-value is the probability that the diff. in deviances are larger
+  # than their actual value. Usually this probability is Pr(>F), but instead of
+  # an F distribution we use the bootstrapped distribution
+  
+  return(sum(
+    (diff_in_deviances > bootstrapped_diff_dev) / length(bootstrapped_diff_dev)))
+}
+
+bootstrap_lrt(mod_ls1, 
+              read_csv(here::here("bootstrap_tables", "bootstrap_table_ls1_deviance.csv"), 
+                       show_col_types = FALSE)$boot_t)
+
+bootstrap_lrt(mod_ls2, 
+              read_csv(here::here("bootstrap_tables", "bootstrap_table_ls2_deviance.csv"), 
+                       show_col_types = FALSE)$boot_t)
+
+bootstrap_lrt(mod_lq1, 
+              read_csv(here::here("bootstrap_tables", "bootstrap_table_lq1_deviance.csv"), 
+                       show_col_types = FALSE)$boot_t)

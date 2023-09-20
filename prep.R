@@ -276,11 +276,9 @@ export_rdata_files(xmls[1601:1761])
 # =========================================== #
 
 # This part needs the MusicXML files as notes_no_grace is not a file
-# present in the RDatas. However, a couple of example RDatas
-# (x and y) are left in the root of the GitHub repository (NOT in the
-# RDatas folder) with example "notes" so that this part can be seen to 
-# work correctly. The output doesn't contain grace notes, title or lyrics
-# because these are not supported by the gm package.
+# present in the RDatas. These files cannot be shared publicly.
+
+notes_no_grace = Filter(Negate(is_grace), notes)
 
 get_score(notes_no_grace, anacrusis_duration, type_voice)
 
